@@ -52,4 +52,4 @@ From the project root:
 
 ## Need Help?
 
-See [../DEPLOY.md](../DEPLOY.md) for comprehensive guide.
+See [DEPLOY.md](../docs/DEPLOY.md) for comprehensive guide.

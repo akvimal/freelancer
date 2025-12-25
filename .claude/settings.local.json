@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run infra:stop:*)"
+      "Bash(npm run infra:stop:*)",
+      "Bash(git add:*)"
     ]
   }
 }

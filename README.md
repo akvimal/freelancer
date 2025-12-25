@@ -73,7 +73,7 @@ npm run dev
 
 ### Full Deployment Documentation
 
-See [DEPLOY.md](./DEPLOY.md) for comprehensive deployment guide including:
+See [DEPLOY.md](docs/DEPLOY.md) for comprehensive deployment guide including:
 - Available npm commands
 - Database management
 - Infrastructure management

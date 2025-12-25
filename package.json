@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "deploy:dev": "deploy-dev.bat",
+    "deploy:prod": "scripts\\deploy\\deploy-prod.bat",
+    "deploy:rollback": "scripts\\deploy\\rollback.bat",
+    "deploy:health": "scripts\\deploy\\health-check.bat",
     "db:migrate": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
     "db:generate": "prisma generate",
@@ -15,7 +18,11 @@
     "db:status": "scripts\\db-status.bat",
     "db:reset": "scripts\\db-reset.bat",
     "infra:start": "scripts\\infra-start.bat",
-    "infra:stop": "scripts\\infra-stop.bat"
+    "infra:stop": "scripts\\infra-stop.bat",
+    "docker:build": "docker build -t freelance-manager:latest .",
+    "docker:run": "docker-compose -f docker-compose.prod.yml up -d",
+    "docker:stop": "docker-compose -f docker-compose.prod.yml down",
+    "docker:logs": "docker logs -f freelance-manager-prod"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
