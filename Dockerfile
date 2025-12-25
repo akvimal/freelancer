@@ -58,8 +58,11 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
-# Copy package.json for Prisma
+# Copy package.json and install prisma CLI for migrations
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/package-lock.json ./package-lock.json
+RUN npm install prisma@5.22.0 --save-dev --legacy-peer-deps && \
+    npm cache clean --force
 
 # Set permissions
 RUN chown -R nextjs:nodejs /app
