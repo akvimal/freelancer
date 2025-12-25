@@ -49,7 +49,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     networks:
       - infrastructure-prod
-    command: ["npx", "prisma", "migrate", "deploy"]
+    command: ["node_modules/.bin/prisma", "migrate", "deploy"]
     restart: "no"
     labels:
       - "com.agentpro.environment=prod"
