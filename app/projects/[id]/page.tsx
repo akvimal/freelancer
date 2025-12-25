@@ -7,6 +7,8 @@ import { formatCurrency, formatDate } from "@/lib/utils"
 import { ArrowLeft, FileText, Pencil, Trash2 } from "lucide-react"
 import { DeleteProjectButton } from "@/components/delete-project-button"
 
+export const dynamic = 'force-dynamic'
+
 async function getProject(id: string) {
   const project = await prisma.project.findUnique({
     where: { id },

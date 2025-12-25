@@ -9,6 +9,8 @@ import { InvoiceActions } from "@/components/invoice-actions"
 import { PaymentForm } from "@/components/payment-form"
 import { InvoiceStatus } from "@/components/invoice-status"
 
+export const dynamic = 'force-dynamic'
+
 async function getInvoice(id: string) {
   const invoice = await prisma.invoice.findUnique({
     where: { id },

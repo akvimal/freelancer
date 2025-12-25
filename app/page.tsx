@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { formatCurrency, formatDate } from "@/lib/utils"
 import { FileText, DollarSign, Users, Clock } from "lucide-react"
 
+export const dynamic = 'force-dynamic'
+
 async function getDashboardData() {
   const [invoices, clients] = await Promise.all([
     prisma.invoice.findMany({

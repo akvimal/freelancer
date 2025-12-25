@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { formatCurrency, formatDate } from "@/lib/utils"
 import { Plus } from "lucide-react"
 
+export const dynamic = 'force-dynamic'
+
 async function getProjects() {
   const projects = await prisma.project.findMany({
     include: {

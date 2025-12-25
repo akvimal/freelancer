@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 import { formatCurrency, formatDate } from "@/lib/utils"
 import { FileText, Plus } from "lucide-react"
 
+export const dynamic = 'force-dynamic'
+
 async function getInvoices() {
   return await prisma.invoice.findMany({
     include: {

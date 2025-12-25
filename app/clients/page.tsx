@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button"
 import { prisma } from "@/lib/prisma"
 import { Users, Plus, Mail, Building2 } from "lucide-react"
 
+export const dynamic = 'force-dynamic'
+
 async function getClients() {
   return await prisma.client.findMany({
     include: {

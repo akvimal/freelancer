@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma"
 import { formatCurrency, formatDate } from "@/lib/utils"
 import { Mail, Phone, Building2, MapPin, FileText, FolderKanban, ArrowLeft } from "lucide-react"
 
+export const dynamic = 'force-dynamic'
+
 async function getClient(id: string) {
   const client = await prisma.client.findUnique({
     where: { id },
