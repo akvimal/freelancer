@@ -1,0 +1,169 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id              String    @id @default(cuid())
+  name            String
+  email           String
+  phone           String?
+  company         String?
+  address         String?
+  city            String?
+  state           String?
+  zipCode         String?
+  country         String?
+  taxId           String?
+  paymentTerms    Int       @default(30) // days (Net 30, Net 15, etc.)
+  notes           String?
+  status          String    @default("active") // active, inactive, lead
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  projects        Project[]
+  invoices        Invoice[]
+}
+
+model Project {
+  id              String    @id @default(cuid())
+  name            String
+  description     String?
+  clientId        String
+  status          String    @default("active") // proposal, active, on-hold, completed, cancelled
+  budget          Float?
+  currency        String    @default("USD")
+  startDate       DateTime?
+  endDate         DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  client          Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  invoices        Invoice[]
+  timeEntries     TimeEntry[]
+  expenses        Expense[]
+}
+
+model Invoice {
+  id              String    @id @default(cuid())
+  invoiceNumber   String    @unique
+  clientId        String
+  projectId       String?
+  issueDate       DateTime  @default(now())
+  dueDate         DateTime
+  status          String    @default("draft") // draft, sent, paid, overdue, cancelled
+  subtotal        Float     @default(0)
+  taxRate         Float     @default(0) // percentage (e.g., 10 for 10%)
+  taxAmount       Float     @default(0)
+  discount        Float     @default(0)
+  total           Float     @default(0)
+  currency        String    @default("USD")
+  notes           String?
+  terms           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  client          Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  project         Project?    @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  items           InvoiceItem[]
+  payments        Payment[]
+}
+
+model InvoiceItem {
+  id              String    @id @default(cuid())
+  invoiceId       String
+  description     String
+  quantity        Float     @default(1)
+  rate            Float
+  amount          Float
+  createdAt       DateTime  @default(now())
+
+  invoice         Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id              String    @id @default(cuid())
+  invoiceId       String
+  amount          Float
+  paymentDate     DateTime  @default(now())
+  paymentMethod   String    // bank transfer, credit card, PayPal, etc.
+  notes           String?
+  createdAt       DateTime  @default(now())
+
+  invoice         Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model TimeEntry {
+  id              String    @id @default(cuid())
+  projectId       String
+  description     String
+  hours           Float
+  hourlyRate      Float?
+  date            DateTime  @default(now())
+  billable        Boolean   @default(true)
+  invoiced        Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Expense {
+  id              String    @id @default(cuid())
+  projectId       String
+  description     String
+  amount          Float
+  category        String
+  date            DateTime  @default(now())
+  billable        Boolean   @default(false)
+  invoiced        Boolean   @default(false)
+  receipt         String? // file path or URL
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Settings {
+  id                    String    @id @default(cuid())
+  businessName          String    @default("FreelanceManager")
+  businessEmail         String?
+  businessPhone         String?
+  businessAddress       String?
+  businessCity          String?
+  businessState         String?
+  businessZipCode       String?
+  businessCountry       String?
+  taxId                 String?
+  gstNumber             String?
+  panNumber             String?
+
+  // Bank Details
+  bankAccountHolder     String?
+  bankName              String?
+  bankAccountNumber     String?
+  bankRoutingNumber     String?
+  bankSwiftCode         String?
+  bankIban              String?
+
+  // Email Configuration (for sending invoices)
+  emailHost             String?   // smtp.gmail.com
+  emailPort             Int?      // 587
+  emailUser             String?   // your-email@gmail.com
+  emailPassword         String?   // app-specific password
+  emailFromName         String?   // Your Business Name
+  emailFromAddress      String?   // your-email@gmail.com
+
+  // Signature (base64 encoded image)
+  signature             String?   // base64 encoded signature image
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
