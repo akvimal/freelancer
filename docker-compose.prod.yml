@@ -42,14 +42,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: freelance-manager:${VERSION:-latest}
+      target: migration
+    image: freelance-manager-migrate:${VERSION:-latest}
     container_name: freelance-manager-migrate
     environment:
       - NODE_ENV=production
       - DATABASE_URL=${DATABASE_URL}
     networks:
       - infrastructure-prod
-    command: ["node_modules/.bin/prisma", "migrate", "deploy"]
     restart: "no"
     labels:
       - "com.agentpro.environment=prod"

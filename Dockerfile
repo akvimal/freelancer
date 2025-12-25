@@ -36,7 +36,22 @@ RUN npx prisma generate
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
-# Stage 3: Runner (Production)
+# Stage 3: Migration (for running database migrations)
+FROM node:20-alpine AS migration
+WORKDIR /app
+
+# Install dependencies for Prisma
+RUN apk add --no-cache libc6-compat openssl
+
+# Copy necessary files from builder
+COPY --from=builder /app/package.json /app/package-lock.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
+
+# Default command for migrations
+CMD ["npx", "prisma", "migrate", "deploy"]
+
+# Stage 4: Runner (Production)
 FROM node:20-alpine AS runner
 WORKDIR /app
 
@@ -58,11 +73,8 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
-# Copy package.json and install prisma CLI for migrations
+# Copy package.json for reference
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/package-lock.json ./package-lock.json
-RUN npm install prisma@5.22.0 --save-dev --legacy-peer-deps && \
-    npm cache clean --force
 
 # Set permissions
 RUN chown -R nextjs:nodejs /app
