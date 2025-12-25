@@ -63,10 +63,10 @@ export async function POST(
     const pageHeight = doc.internal.pageSize.getHeight()
 
     // Colors
-    const primaryColor = [41, 128, 185] // Blue
-    const darkGray = [51, 51, 51]
-    const lightGray = [128, 128, 128]
-    const bgGray = [245, 245, 245]
+    const primaryColor: [number, number, number] = [41, 128, 185] // Blue
+    const darkGray: [number, number, number] = [51, 51, 51]
+    const lightGray: [number, number, number] = [128, 128, 128]
+    const bgGray: [number, number, number] = [245, 245, 245]
 
     // Header Background
     doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2])
