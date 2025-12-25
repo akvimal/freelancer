@@ -53,10 +53,10 @@ dev.db
 
 # Prisma
 prisma/migrations.sqlite.backup
+prisma.config.ts
 
 # Documentation
 README.md
-DEPLOY.md
 docs
 
 # Scripts
