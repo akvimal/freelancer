@@ -16,6 +16,9 @@ RUN npm ci --only=production && \
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# Install OpenSSL 1.1 compatibility for Prisma
+RUN apk add --no-cache openssl1.1-compat
+
 # Copy package files and install all dependencies (including dev)
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -36,6 +39,9 @@ RUN npm run build
 # Stage 3: Runner (Production)
 FROM node:20-alpine AS runner
 WORKDIR /app
+
+# Install OpenSSL 1.1 compatibility for Prisma
+RUN apk add --no-cache openssl1.1-compat
 
 # Set production environment
 ENV NODE_ENV production
